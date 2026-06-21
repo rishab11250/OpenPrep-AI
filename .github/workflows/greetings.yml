@@ -1,0 +1,97 @@
+name: Greetings
+
+concurrency:
+  group: greetings-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  greeting:
+    if: ${{ !endsWith(github.event.issue.user.login || github.event.pull_request.user.login, '[bot]') }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const isIssue = !!context.payload.issue;
+            const item = isIssue ? context.payload.issue : context.payload.pull_request;
+            const author = item.user.login;
+            const num = item.number;
+
+            const { data: existing } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: num,
+              per_page: 50
+            });
+            if (existing.some(c => c.user.login == 'github-actions[bot]' && c.body.includes('Welcome to OpenPrep AI'))) {
+              console.log('Greeting already posted — skipping');
+              return;
+            }
+
+            const { data: allItems } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              creator: author,
+              state: 'all',
+              per_page: 100
+            });
+
+            const sameType = allItems.filter(i =>
+              isIssue ? !i.pull_request : !!i.pull_request
+            );
+
+            if (sameType.length !== 1) return;
+
+            if (isIssue) {
+              await github.rest.issues.createComment({
+                issue_number: num,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: [
+                  '🎉 **Welcome to OpenPrep AI!**',
+                  '',
+                  'Thank you for opening your first issue! Your contribution helps make this project better.',
+                  '',
+                  '**Quick Links:**',
+                  '- [Contribution Guidelines](https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/blob/main/CONTRIBUTING.md)',
+                  '- [Code of Conduct](https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/blob/main/CODE_OF_CONDUCT.md)',
+                  '',
+                  'A maintainer will review this shortly. If you would like to work on a fix, let us know in the comments!'
+                ].join('\n')
+              });
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: num,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: [
+                  '🎉 **Welcome to OpenPrep AI!**',
+                  '',
+                  'Thank you for your first contribution!',
+                  '',
+                  '**Useful Links:**',
+                  '- [Contribution Guidelines](https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/blob/main/CONTRIBUTING.md)',
+                  '- [Code of Conduct](https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/blob/main/CODE_OF_CONDUCT.md)',
+                  '- [Setup Guide](https://github.com/' + context.repo.owner + '/' + context.repo.repo + '/blob/main/docs/setup-guide.md)',
+                  '',
+                  '**Review Process:**',
+                  '1. Automated CI checks will run on your PR',
+                  '2. Maintainers will review your changes and may request adjustments',
+                  '3. Once approved, your PR will be merged',
+                  '',
+                  '**Requirements:**',
+                  '- Update documentation if your changes introduce new features',
+                  '- Add or update tests for your changes',
+                  '- Ensure all CI checks pass before requesting review'
+                ].join('\n')
+              });
+            }

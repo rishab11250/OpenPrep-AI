@@ -1,4 +1,8 @@
-name: Issue Area Labeler
+name: Issue Auto Labeler
+
+concurrency:
+  group: issue-labeler-${{ github.event.issue.number }}
+  cancel-in-progress: false
 
 on:
   issues:
@@ -6,36 +10,59 @@ on:
 
 jobs:
   label:
-    name: Auto-Label Issue Areas
     runs-on: ubuntu-latest
     permissions:
       issues: write
-
     steps:
-      - name: Parse and Label Issue
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_BODY: ${{ github.event.issue.body }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-          REPOSITORY: ${{ github.repository }}
-        run: |
-          LABELS=()
-          # Parse checkboxes using bash case-insensitive matching
-          if echo "$ISSUE_BODY" | grep -qi -E '-\s*\[x\]\s*Frontend'; then LABELS+=("frontend"); fi
-          if echo "$ISSUE_BODY" | grep -qi -E '-\s*\[x\]\s*Backend'; then LABELS+=("backend"); fi
-          if echo "$ISSUE_BODY" | grep -qi -E '-\s*\[x\]\s*Database'; then LABELS+=("database"); fi
-          if echo "$ISSUE_BODY" | grep -qi -E '-\s*\[x\]\s*AI'; then LABELS+=("ai"); fi
-          if echo "$ISSUE_BODY" | grep -qi -E '-\s*\[x\]\s*Authentication'; then LABELS+=("authentication"); fi
-          if echo "$ISSUE_BODY" | grep -qi -E '-\s*\[x\]\s*PYQ Analysis'; then LABELS+=("pyq-analysis"); fi
-          if echo "$ISSUE_BODY" | grep -qi -E '-\s*\[x\]\s*Study Planner'; then LABELS+=("study-planner"); fi
-          if echo "$ISSUE_BODY" | grep -qi -E '-\s*\[x\]\s*Dashboard'; then LABELS+=("dashboard"); fi
-          if echo "$ISSUE_BODY" | grep -qi -E '-\s*\[x\]\s*UI/UX'; then LABELS+=("ui/ux"); fi
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.issue.body || '';
+            const title = context.payload.issue.title || '';
+            const num = context.issue.number;
+            const labels = [];
 
-          if [ ${#LABELS[@]} -gt 0 ]; then
-            # Join array by comma
-            LABEL_STR=$(IFS=,; echo "${LABELS[*]}")
-            echo "Applying labels: $LABEL_STR"
-            gh issue edit "$ISSUE_NUMBER" --repo "$REPOSITORY" --add-label "$LABEL_STR"
-          else
-            echo "No area checkboxes selected."
-          fi
+            const upper = title.toUpperCase();
+            if (upper.includes('[BUG]')) labels.push('bug');
+            else if (upper.includes('[FEATURE]')) labels.push('enhancement');
+            else if (upper.includes('[DOCS]') || upper.includes('[DOCUMENTATION]')) labels.push('documentation');
+            else if (upper.includes('[QUESTION]')) labels.push('question');
+
+            const areaMap = {
+              'Frontend': 'frontend',
+              'Backend': 'backend',
+              'Database': 'database',
+              'Authentication': 'authentication',
+              'AI': 'ai',
+              'UI/UX': 'ui/ux',
+              'PYQ Analysis': 'pyq-analysis',
+              'Study Planner': 'study-planner',
+              'Dashboard': 'dashboard'
+            };
+
+            for (const [area, label] of Object.entries(areaMap)) {
+              const re = new RegExp(
+                '-\\s*\\[x\\]\\s*' + area.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+                'im'
+              );
+              if (re.test(body)) labels.push(label);
+            }
+
+            const deduped = [...new Set(labels)];
+            if (deduped.length === 0) return;
+
+            const { data: existing } = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: num
+            });
+            const have = new Set(existing.map(l => l.name));
+            const needed = deduped.filter(l => !have.has(l));
+            if (needed.length === 0) return;
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: num,
+              labels: needed
+            });

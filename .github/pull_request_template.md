@@ -1,25 +1,82 @@
-## Description
-
-Please include a summary of the changes and the related issue. Please also include relevant motivation and context.
+# Summary
 
 ## Related Issue
 
-Fixes # (issue number)
+Fixes #[ISSUE_NUMBER]
 
-## Areas Affected
+## Type of Change
 
-* [ ] frontend
-* [ ] backend
-* [ ] database
-* [ ] ai
-* [ ] authentication
-* [ ] pyq-analysis
-* [ ] study-planner
-* [ ] dashboard
-* [ ] ui/ux
+- [ ] Feature
+- [ ] Bug Fix
+- [ ] UI/UX Improvement
+- [ ] Performance Optimization
+- [ ] Security Enhancement
+- [ ] Refactoring
+- [ ] Documentation
+- [ ] Testing
+- [ ] Infrastructure
+- [ ] Integration
+
+## Changes Implemented
+
+## Technical Details
+
+### Frontend
+
+### Backend
+
+### Database
+
+### API
+
+### Infrastructure
+
+## Screenshots
+
+### Before
+
+### After
+
+## Testing
+
+### Unit Tests
+
+- [ ]
+
+### Integration Tests
+
+- [ ]
+
+### E2E Tests
+
+- [ ]
+
+### Manual Testing
+
+- [ ]
+
+## Security Review
+
+## Accessibility Review
+
+## Performance Impact
+
+## Breaking Changes
+
+- [ ] No Breaking Changes
+- [ ] Breaking Changes Documented
+
+## Deployment Notes
+
+## Rollback Plan
 
 ## Checklist
 
-* [ ] Code tested
-* [ ] Documentation updated
-* [ ] No build errors
+- [ ] Code follows project standards
+- [ ] Tests added or updated
+- [ ] Documentation updated
+- [ ] Security reviewed
+- [ ] Accessibility reviewed
+- [ ] Performance validated
+- [ ] CI/CD passing
+- [ ] Ready for review
