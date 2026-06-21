@@ -7,6 +7,23 @@ body:
     attributes:
       value: |
         Thanks for taking the time to report a bug! Please fill out the details below.
+  - type: checkboxes
+    id: areas
+    attributes:
+      label: Affected Areas
+      description: Select one or more areas that this bug affects.
+      options:
+        - label: Frontend
+        - label: Backend
+        - label: Database
+        - label: AI
+        - label: Authentication
+        - label: PYQ Analysis
+        - label: Study Planner
+        - label: Dashboard
+        - label: UI/UX
+    validations:
+      required: true
   - type: textarea
     id: description
     attributes:
