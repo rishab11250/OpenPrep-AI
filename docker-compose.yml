@@ -11,11 +11,11 @@ services:
     networks:
       - openprep_net
 
-  server:
+  backend:
     build:
-      context: ./server
+      context: ./backend
       dockerfile: Dockerfile
-    container_name: openprep_server
+    container_name: openprep_backend
     ports:
       - "5000:5000"
     environment:
@@ -29,15 +29,15 @@ services:
     networks:
       - openprep_net
 
-  client:
+  frontend:
     build:
-      context: ./client
+      context: ./frontend
       dockerfile: Dockerfile
-    container_name: openprep_client
+    container_name: openprep_frontend
     ports:
       - "3000:3000"
     depends_on:
-      - server
+      - backend
     networks:
       - openprep_net
 
