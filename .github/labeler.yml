@@ -1,4 +1,4 @@
-# Configuration for GitHub Labeler Action
+# Configuration for GitHub Labeler Action matching all required Area paths
 
 frontend:
   - changed-files:
@@ -12,9 +12,17 @@ database:
   - changed-files:
       - any-glob-to-any-file: 'backend/models/**/*'
 
-documentation:
+authentication:
   - changed-files:
-      - any-glob-to-any-file: '**/*.md'
+      - any-glob-to-any-file:
+          - 'backend/controllers/auth/**/*'
+          - 'backend/middleware/auth/**/*'
+
+ai:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'backend/services/ai/**/*'
+          - 'backend/services/gemini/**/*'
 
 ui/ux:
   - changed-files:
@@ -22,19 +30,20 @@ ui/ux:
           - 'frontend/src/components/**/*'
           - 'frontend/src/pages/**/*'
 
-ai:
+pyq-analysis:
   - changed-files:
       - any-glob-to-any-file:
-          - 'backend/services/geminiService.js'
-          - 'backend/controllers/pyqController.js'
-          - 'backend/controllers/studyPlanController.js'
-          - 'backend/controllers/quizController.js'
+          - 'backend/modules/pyq/**/*'
+          - 'frontend/src/features/pyq/**/*'
 
-authentication:
+study-planner:
   - changed-files:
       - any-glob-to-any-file:
-          - 'backend/middleware/auth.js'
-          - 'backend/models/User.js'
-          - 'backend/controllers/authController.js'
-          - 'backend/routes/authRoutes.js'
-          - 'frontend/src/store/slices/authSlice.js'
+          - 'backend/modules/study-planner/**/*'
+          - 'frontend/src/features/study-planner/**/*'
+
+dashboard:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'frontend/src/pages/Dashboard/**/*'
+          - 'frontend/src/features/dashboard/**/*'
