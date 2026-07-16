@@ -9,7 +9,8 @@
     "dev:backend": "npm run dev --prefix backend",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "lint": "eslint . --ext .js,.jsx",
-    "format": "prettier --write \"**/*.{js,jsx,json,css,md}\""
+    "format": "prettier --write \"**/*.{js,jsx,json,css,md}\"",
+    "create-labels": "node scripts/create-labels.js"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

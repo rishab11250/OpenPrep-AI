@@ -37,7 +37,10 @@ jobs:
               'UI/UX': 'ui/ux',
               'PYQ Analysis': 'pyq-analysis',
               'Study Planner': 'study-planner',
-              'Dashboard': 'dashboard'
+              'Dashboard': 'dashboard',
+              'Elite Summer of Code (esoc)': 'esoc',
+              'GirlScript Summer of Code (gssoc)': 'gssoc',
+              'NSoC (nsoc)': 'nsoc'
             };
 
             for (const [area, label] of Object.entries(areaMap)) {

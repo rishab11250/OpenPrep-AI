@@ -86,6 +86,14 @@ So that [benefit]
 - [ ] Dashboard
 - [ ] UI/UX
 
+## Open Source Programs
+
+Select if this issue is part of an open-source program:
+
+- [ ] Elite Summer of Code (esoc)
+- [ ] GirlScript Summer of Code (gssoc)
+- [ ] NSoC (nsoc)
+
 ## Definition of Done
 
 - [ ] Implementation completed

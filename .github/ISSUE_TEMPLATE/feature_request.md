@@ -32,6 +32,14 @@ Select all that apply:
 - [ ] Dashboard
 - [ ] UI/UX
 
+### Open Source Programs
+
+Select if this issue is part of an open-source program:
+
+- [ ] Elite Summer of Code (esoc)
+- [ ] GirlScript Summer of Code (gssoc)
+- [ ] NSoC (nsoc)
+
 ### Additional Context
 
 Add any other context or screenshots about the feature request here.

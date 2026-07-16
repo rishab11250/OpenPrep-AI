@@ -1,0 +1,97 @@
+name: Initialize GitHub Labels
+
+on:
+  workflow_dispatch: # Allows manual trigger from Actions tab
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/initialize-labels.yml'
+
+jobs:
+  create-labels:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Create or Update Labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = [
+              // ESOC (Elite Summer of Code)
+              { name: 'esoc', color: 'F9D0C4', description: 'Elite Summer of Code contributions' },
+              { name: 'esoc-2026', color: 'D640C6', description: 'Issues/PRs related to Elite Summer of Code 2026' },
+              { name: 'esoc-approved', color: '80553B', description: 'Approved for Elite Summer of Code' },
+              { name: 'esoc-l1', color: 'EDEDED', description: 'Level 1 (Easy / Beginner-friendly) ESOC task' },
+              { name: 'esoc-l2', color: 'fbca04', description: 'Level 2 (Medium / Intermediate) ESOC task' },
+              { name: 'esoc-l3', color: 'b60205', description: 'Level 3 (Hard / Advanced) ESOC task' },
+
+              // GSSoC & NSoC
+              { name: 'gssoc', color: 'FF9900', description: 'GirlScript Summer of Code contributions' },
+              { name: 'gssoc26', color: 'FF9900', description: 'GirlScript Summer of Code 2026' },
+              { name: 'gssoc-approved', color: 'A2553B', description: 'GSSoC Approved issue' },
+              { name: 'nsoc', color: 'FF007F', description: 'NSoC contributions' },
+              { name: 'NSoC\'26', color: 'FF007F', description: 'NSoC 2026 contributions' },
+              { name: 'nsoc-approved', color: 'FF007F', description: 'NSoC Approved issue' },
+
+              // Hacktoberfest
+              { name: 'hacktoberfest', color: 'FF5500', description: 'Hacktoberfest contributions' },
+              { name: 'hacktoberfest-accepted', color: 'FF5500', description: 'Approved Hacktoberfest PR' },
+
+              // Difficulty & Contribution
+              { name: 'good first issue', color: '7057ff', description: 'Good for newcomers' },
+              { name: 'beginner friendly', color: '0052cc', description: 'Perfect for first-time contributors' },
+              { name: 'help wanted', color: '008672', description: 'Extra attention is needed' },
+
+              // Project Areas
+              { name: 'frontend', color: '5319e7', description: 'Frontend related changes' },
+              { name: 'backend', color: '1d76db', description: 'Backend related changes' },
+              { name: 'database', color: '0366d6', description: 'Database and model related changes' },
+              { name: 'ai', color: 'ff00cc', description: 'Artificial Intelligence / Gemini API changes' },
+              { name: 'ui/ux', color: 'a2eeef', description: 'UI/UX and design improvements' },
+              { name: 'authentication', color: 'e11d48', description: 'Auth, login, and middleware changes' },
+              { name: 'pyq-analysis', color: 'bfd4f2', description: 'PYQ analysis features' },
+              { name: 'study-planner', color: '1338be', description: 'Study planner features' },
+              { name: 'dashboard', color: '7f00ff', description: 'Dashboard related features' },
+
+              // PR Status & Lifecycle
+              { name: 'ready-for-review', color: '22c55e', description: 'PR is complete and ready for review' },
+              { name: 'work-in-progress', color: 'cfd3d7', description: 'Active development in progress' },
+              { name: 'needs-review', color: 'f97316', description: 'Issue or PR needs maintainer review' },
+              { name: 'needs-rebase', color: 'ededed', description: 'PR needs to be rebased with the main branch' }
+            ];
+
+            const { owner, repo } = context.repo;
+
+            for (const label of labels) {
+              try {
+                // Check if label exists
+                await github.rest.issues.getLabel({
+                  owner,
+                  repo,
+                  name: label.name
+                });
+                console.log(`Label "${label.name}" already exists. Updating...`);
+                await github.rest.issues.updateLabel({
+                  owner,
+                  repo,
+                  name: label.name,
+                  color: label.color,
+                  description: label.description
+                });
+              } catch (error) {
+                if (error.status === 404) {
+                  console.log(`Label "${label.name}" does not exist. Creating...`);
+                  await github.rest.issues.createLabel({
+                    owner,
+                    repo,
+                    name: label.name,
+                    color: label.color,
+                    description: label.description
+                  });
+                } else {
+                  console.error(`Failed to handle label "${label.name}":`, error);
+                }
+              }
+            }
