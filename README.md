@@ -18,10 +18,11 @@
 ## 🎯 Problem Statement
 
 Most students waste critical preparation hours trying to figure out:
-* What chapters hold the highest exam weightage?
-* Which questions are repeatedly asked?
-* How to schedule daily study topics effectively?
-* Where their weak points lie?
+
+- What chapters hold the highest exam weightage?
+- Which questions are repeatedly asked?
+- How to schedule daily study topics effectively?
+- Where their weak points lie?
 
 **OpenPrep AI** resolves these frustrations by utilizing advanced LLMs (Gemini API) and data-driven learning strategies (spaced repetition, adaptive planning) to structure their preparation path automatically.
 
@@ -29,24 +30,24 @@ Most students waste critical preparation hours trying to figure out:
 
 ## ✨ Features
 
-* **📄 PDF & Notes Analysis**: Extract core themes, chapter summaries, and revision points from academic uploads.
-* **📊 PYQ Intelligence**: Parse Previous Year Question Papers (PYQs) to map chapter weightage, extract repeated questions, and detect trends.
-* **🧠 AI Quiz Generator**: Dynamically generate MCQ assessments based on custom uploaded notes or specific syllabus topics.
-* **📅 Smart Study Planner**: Input your exam date, syllabus scope, and study hours to generate a customized, calendarized study schedule.
-* **🎯 Weakness Detection**: Tracks performance across quiz attempts to dynamically highlight weak subjects and adapt study goals.
-* **📚 Spaced Repetition Flashcards**: Memorize complex concepts using flashcards backed by the SuperMemo SM-2 adaptation algorithm.
+- **📄 PDF & Notes Analysis**: Extract core themes, chapter summaries, and revision points from academic uploads.
+- **📊 PYQ Intelligence**: Parse Previous Year Question Papers (PYQs) to map chapter weightage, extract repeated questions, and detect trends.
+- **🧠 AI Quiz Generator**: Dynamically generate MCQ assessments based on custom uploaded notes or specific syllabus topics.
+- **📅 Smart Study Planner**: Input your exam date, syllabus scope, and study hours to generate a customized, calendarized study schedule.
+- **🎯 Weakness Detection**: Tracks performance across quiz attempts to dynamically highlight weak subjects and adapt study goals.
+- **📚 Spaced Repetition Flashcards**: Memorize complex concepts using flashcards backed by the SuperMemo SM-2 adaptation algorithm.
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Component | Technologies Used |
-| --- | --- |
-| **Frontend** | React, Vite, Tailwind CSS, Redux Toolkit, React Router |
-| **Backend** | Node.js, Express.js, JWT Authentication |
-| **Database** | MongoDB, Mongoose ORM |
-| **AI Integration** | Gemini API (`gemini-1.5-flash`) |
-| **DevOps & CI** | Docker, Docker Compose, GitHub Actions |
+| Component          | Technologies Used                                      |
+| ------------------ | ------------------------------------------------------ |
+| **Frontend**       | React, Vite, Tailwind CSS, Redux Toolkit, React Router |
+| **Backend**        | Node.js, Express.js, JWT Authentication                |
+| **Database**       | MongoDB, Mongoose ORM                                  |
+| **AI Integration** | Gemini API (`gemini-1.5-flash`)                        |
+| **DevOps & CI**    | Docker, Docker Compose, GitHub Actions                 |
 
 ---
 
@@ -79,10 +80,13 @@ OpenPrep-AI/
 For a step-by-step setup guide with environment variable details, review the [Setup Guide](file:///c:/Users/Nishit/OneDrive/Desktop/ALL%20Projects/OPENPREP%20AI/OpenPrep-AI/docs/setup-guide.md).
 
 ### Quick Launch with Docker
+
 If you have Docker installed, you can spin up the frontend, backend, and MongoDB instances with a single command:
+
 ```bash
 docker-compose up --build
 ```
+
 The React frontend will be available at `http://localhost:5173` and the Express API at `http://localhost:5000`.
 
 ### Manual Local Launch
@@ -111,10 +115,11 @@ The React frontend will be available at `http://localhost:5173` and the Express 
 ---
 
 ## 🗺️ Roadmap
-* **v1.0**: Core authentication, AI study planners, quiz generators, and analytics dashboards.
-* **v1.5**: Spaced repetition engine, PYQ PDF parser, and attempt history trends.
-* **v2.0**: Weakness-adapted scheduling, community note pools, and OCR processing.
-* **v3.0**: Live study battles, AI chat mentors, and React Native mobile client.
+
+- **v1.0**: Core authentication, AI study planners, quiz generators, and analytics dashboards.
+- **v1.5**: Spaced repetition engine, PYQ PDF parser, and attempt history trends.
+- **v2.0**: Weakness-adapted scheduling, community note pools, and OCR processing.
+- **v3.0**: Live study battles, AI chat mentors, and React Native mobile client.
 
 For the comprehensive technical roadmap, review [docs/project-roadmap.md](file:///c:/Users/Nishit/OneDrive/Desktop/ALL%20Projects/OPENPREP%20AI/OpenPrep-AI/docs/project-roadmap.md).
 
@@ -137,8 +142,9 @@ This project is licensed under the MIT License. See [LICENSE](file:///c:/Users/N
 ## ❤️ Support
 
 If you love this project, show your support:
-* ⭐ **Star** our repository on GitHub.
-* 🍴 **Fork** it to start contributing.
-* 📢 **Share** it with your classmates and peers!
 
-*Built with ❤️ for students worldwide.*
+- ⭐ **Star** our repository on GitHub.
+- 🍴 **Fork** it to start contributing.
+- 📢 **Share** it with your classmates and peers!
+
+_Built with ❤️ for students worldwide._

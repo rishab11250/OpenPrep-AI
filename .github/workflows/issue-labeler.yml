@@ -20,7 +20,7 @@ jobs:
             const body = context.payload.issue.body || '';
             const title = context.payload.issue.title || '';
             const num = context.issue.number;
-            const labels = [];
+            const labels = ['ECSoC26'];
 
             const upper = title.toUpperCase();
             if (upper.includes('[BUG]')) labels.push('bug');
