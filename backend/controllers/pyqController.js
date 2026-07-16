@@ -34,7 +34,7 @@ exports.uploadAndAnalyzePYQ = async (req, res, next) => {
     }
 
     // Call Gemini API for structure analysis
-    const analysis = await geminiService.analyzePYQText(extractedText, subject.name);
+    const analysis = await geminiService.analyzePYQText(extractedText, subject.name, req.query.refresh === 'true');
 
     // Save to Database
     const pyq = await PYQ.create({

@@ -32,7 +32,7 @@ exports.generateAIFlashcards = async (req, res, next) => {
     }
 
     // Call Gemini
-    const cardsList = await geminiService.generateFlashcards(subject.name, topicName, notesText, count || 6);
+    const cardsList = await geminiService.generateFlashcards(subject.name, topicName, notesText, count || 6, req.query.refresh === 'true');
 
     const createdCards = [];
     for (const card of cardsList) {

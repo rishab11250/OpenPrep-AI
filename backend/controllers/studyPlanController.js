@@ -42,7 +42,8 @@ exports.generateAIPlan = async (req, res, next) => {
       syllabus,
       startDate,
       endDate,
-      studyHoursPerDay || 3
+      studyHoursPerDay || 3,
+      req.query.refresh === 'true'
     );
 
     // Format goals for Mongoose insertion (resolve Topic ObjectIds if names match)
