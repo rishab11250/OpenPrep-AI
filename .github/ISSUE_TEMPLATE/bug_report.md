@@ -51,6 +51,14 @@ Select if this issue is part of an open-source program:
 
 - [ ] Elite Summer of Code (esoc)
 
+### Difficulty Level (ESOC)
+
+Select the difficulty level for this issue:
+
+- [ ] Level 1 (Easy / Beginner-friendly) (esoc-l1)
+- [ ] Level 2 (Medium / Intermediate) (esoc-l2)
+- [ ] Level 3 (Hard / Advanced) (esoc-l3)
+
 ### Checklist
 
 - [ ] I have searched existing issues to ensure this bug has not been reported already.
