@@ -24,11 +24,13 @@ function CustomCursor() {
       dot.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
     };
 
+    let frame;
+
     const animateRing = () => {
       ringX += (mouseX - ringX) * 0.18;
       ringY += (mouseY - ringY) * 0.18;
       ring.style.transform = `translate(${ringX}px, ${ringY}px)`;
-      requestAnimationFrame(animateRing);
+      frame = requestAnimationFrame(animateRing);
     };
 
     const addHover = () => ring.classList.add('cursor-hover');
@@ -46,7 +48,7 @@ function CustomCursor() {
     window.addEventListener('mousemove', moveDot);
     window.addEventListener('mousedown', addClick);
     window.addEventListener('mouseup', removeClick);
-    const frame = requestAnimationFrame(animateRing);
+    frame = requestAnimationFrame(animateRing);
 
     const hoverTargets = document.querySelectorAll(
       'a, button, input, textarea, select, [role="button"], .cursor-pointer'
