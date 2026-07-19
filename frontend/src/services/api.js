@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { store } from '../store';
+import { logout } from '../store/slices/authSlice';
 
 const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
@@ -80,8 +82,7 @@ API.interceptors.response.use(
       return API(originalRequest);
     } catch (refreshError) {
       processQueue(refreshError, null);
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
+      store.dispatch(logout());
       return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;
