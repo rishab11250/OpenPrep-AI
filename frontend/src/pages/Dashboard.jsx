@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import {
@@ -119,20 +119,22 @@ const Dashboard = () => {
   const handleRetry = (thunk) => () => dispatch(thunk());
 
   // ── Task Toggle ──
+  const [toggleError, setToggleError] = useState(null);
   const handleToggleTask = async (taskId) => {
     const planId = activePlan?.id || activePlan?._id;
     if (!planId) return;
     const task = todayTasks.find((t) => t.id === taskId);
     if (!task) return;
     const backendTaskId = task.meta?.taskId || task.id;
+    setToggleError(null);
     try {
       await API.put(`/study-plans/${planId}/tasks/${backendTaskId}`, {
         completed: !task.completed,
         studyTimeMinutes: 25,
       });
       dispatch(fetchActivePlan());
-    } catch {
-      // Silently fail — user can retry
+    } catch (err) {
+      setToggleError('Failed to update task. Please try again.');
     }
   };
 
@@ -183,7 +185,7 @@ const Dashboard = () => {
   const firstDueCard = dueFlashcards.length > 0 ? dueFlashcards[0] : null;
 
   // ── Streak display ──
-  const streakDays = stats?.streak ?? 14;
+  const streakDays = stats?.streak ?? 0;
   const totalStudyHours = stats?.totalStudyHours ?? 0;
   const syllabusProgress = stats?.syllabusProgress ?? 0;
   const attemptsCount = stats?.attemptsCount ?? 0;
@@ -413,6 +415,11 @@ const Dashboard = () => {
               onToggle={handleToggleTask}
             />
           </div>
+          {toggleError && (
+            <div className="flex justify-center mt-2">
+              <ErrorBanner message={toggleError} />
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -464,7 +471,7 @@ const Dashboard = () => {
           {/* --- RECENT ACTIVITY TIMELINE --- */}
           <div className="lg:col-span-2 space-y-6">
             <h2 className="text-3xl font-bold font-playfair text-gold-foil border-b border-yellow-700/50 pb-2">
-              Recent Notes
+              Recent Activity
             </h2>
 
             {loadingStats ? (
