@@ -9,7 +9,7 @@ This guide walks you through setting up a local development environment for **Op
 Ensure you have the following installed on your local development machine:
 * [Node.js](https://nodejs.org/) (v18.x or v20.x recommended)
 * [npm](https://www.npmjs.com/) (v9.x or higher)
-* [MongoDB](https://www.mongodb.com/) (Local installation or MongoDB Atlas cluster connection string)
+* [PostgreSQL](https://www.postgresql.org/) (Local installation or remote instance)
 * [Docker & Docker Compose](https://www.docker.com/) (Optional, for running with containers)
 
 ---
@@ -23,7 +23,7 @@ Create a file named `.env` in the `backend/` directory:
 
 ```env
 PORT=5000
-MONGO_URI=mongodb://localhost:27017/openprep-ai
+DATABASE_URL=postgres://postgres:postgres@localhost:5432/openprep
 JWT_SECRET=your_super_secret_jwt_key_change_me
 GEMINI_API_KEY=your_gemini_api_key_here
 ```
@@ -50,12 +50,17 @@ VITE_API_URL=http://localhost:5000/api
    ```bash
    npm install
    ```
-3. Initialize the development database (ensure your local MongoDB service is running):
+3. Ensure your local PostgreSQL service is running and the database specified in `DATABASE_URL` exists.
+4. (Optional) Seed the database with sample development data (subjects, topics, flashcards, quizzes, study plans, etc.):
    ```bash
-   # Windows command prompt / powershell:
-   net start MongoDB
+   # From the repository root (or backend folder):
+   npm run seed
+   
+   # Or to drop existing tables and recreate them cleanly:
+   # (From backend folder)
+   npm run seed -- --clean
    ```
-4. Start the Node.js development server:
+5. Start the Node.js development server:
    ```bash
    npm run dev
    ```
@@ -89,12 +94,12 @@ If you prefer to run the entire stack containerized, you can use the configured 
    ```bash
    docker-compose up --build
    ```
-This command downloads the necessary images, boots an isolated MongoDB service container, and builds the frontend and backend service instances.
+This command downloads the necessary images, boots an isolated PostgreSQL database container, and builds the frontend and backend service instances.
 
 ### Port Mappings
-* **React Frontend**: accessible at `http://localhost:5173`
+* **React Frontend**: accessible at `http://localhost:3000` (in container mode) or `http://localhost:5173` (local dev)
 * **Node.js Express Backend**: accessible at `http://localhost:5000`
-* **MongoDB Database Instance**: internally mapped and exposed at port `27017`
+* **PostgreSQL Database Instance**: internally mapped and exposed at port `5432`
 
 To shut down all running containers, run:
 ```bash

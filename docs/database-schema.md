@@ -1,12 +1,12 @@
 # 🗄️ Database Schemas
 
-**OpenPrep AI** uses **MongoDB** as its primary persistent database, interface-managed via the **Mongoose ORM** in Node.js.
+**OpenPrep AI** uses **PostgreSQL** as its primary persistent database, interface-managed via the **Sequelize ORM** in Node.js.
 
 ---
 
 ## 🗺️ Entity Relationship Overview
 
-The relationships between collections are shown in the following diagram:
+The relationships between database tables are shown in the following diagram:
 
 ```mermaid
 erDiagram
@@ -42,7 +42,7 @@ erDiagram
 
 ## 📄 Model Specifications
 
-Here are the detailed schemas for each collection:
+Here are the detailed schemas for each database model/table:
 
 ### 1. User
 Represents students, contributors, or admins using the platform.
