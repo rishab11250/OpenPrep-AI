@@ -464,7 +464,7 @@ const Dashboard = () => {
           {/* --- RECENT ACTIVITY TIMELINE --- */}
           <div className="lg:col-span-2 space-y-6">
             <h2 className="text-3xl font-bold font-playfair text-gold-foil border-b border-yellow-700/50 pb-2">
-              Recent Notes
+              Recent Activity
             </h2>
 
             {loadingStats ? (
