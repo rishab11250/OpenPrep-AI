@@ -59,8 +59,8 @@ exports.uploadNote = async (req, res, next) => {
 exports.getNotes = async (req, res, next) => {
   try {
     const { subjectId, category, search, publicOnly } = req.query;
-    const page = Math.max(1, parseInt(req.query.page) || 1);
-    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 20));
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 20));
     const offset = (page - 1) * limit;
 
     const where = {};
