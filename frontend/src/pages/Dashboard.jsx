@@ -111,10 +111,17 @@ const Dashboard = () => {
   } = useSelector((state) => state.dashboard);
 
   useEffect(() => {
-    dispatch(fetchDashboardStats());
-    dispatch(fetchSubjectBreakdown());
-    dispatch(fetchActivePlan());
-    dispatch(fetchDueFlashcards());
+    const fetchAll = () => {
+      dispatch(fetchDashboardStats());
+      dispatch(fetchSubjectBreakdown());
+      dispatch(fetchActivePlan());
+      dispatch(fetchDueFlashcards());
+    };
+
+    fetchAll();
+
+    window.addEventListener('focus', fetchAll);
+    return () => window.removeEventListener('focus', fetchAll);
   }, [dispatch]);
 
   const handleRetry = (thunk) => () => dispatch(thunk());
@@ -133,6 +140,8 @@ const Dashboard = () => {
         studyTimeMinutes: 25,
       });
       dispatch(fetchActivePlan());
+      dispatch(fetchDashboardStats());
+      dispatch(fetchSubjectBreakdown());
     } catch (err) {
       setToggleError('Failed to update task. Please try again.');
     }
