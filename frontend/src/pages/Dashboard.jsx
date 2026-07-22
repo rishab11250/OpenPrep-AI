@@ -18,7 +18,7 @@ import GoldTabButton from '../components/dashboard/GoldTabButton';
 import PomodoroTimer from '../components/dashboard/PomodoroTimer';
 import FlashcardWidget from '../components/dashboard/FlashcardWidget';
 import PinnedTasks from '../components/dashboard/PinnedTasks';
-import ThemeToggle from '../components/ThemeToggle';
+import CreateNoteModal from '../components/dashboard/CreateNoteModal';
 
 import {
   fetchDashboardStats,
@@ -111,15 +111,21 @@ const Dashboard = () => {
   } = useSelector((state) => state.dashboard);
 
   useEffect(() => {
-    dispatch(fetchDashboardStats());
-    dispatch(fetchSubjectBreakdown());
-    dispatch(fetchActivePlan());
-    dispatch(fetchDueFlashcards());
+    const fetchAll = () => {
+      dispatch(fetchDashboardStats());
+      dispatch(fetchSubjectBreakdown());
+      dispatch(fetchActivePlan());
+      dispatch(fetchDueFlashcards());
+    };
+
+    fetchAll();
+
+    window.addEventListener('focus', fetchAll);
+    return () => window.removeEventListener('focus', fetchAll);
   }, [dispatch]);
 
   const handleRetry = (thunk) => () => dispatch(thunk());
 
-  // ── Task Toggle ──
   const [toggleError, setToggleError] = useState(null);
   const handleToggleTask = async (taskId) => {
     const planId = activePlan?.id || activePlan?._id;
@@ -134,10 +140,15 @@ const Dashboard = () => {
         studyTimeMinutes: 25,
       });
       dispatch(fetchActivePlan());
+      dispatch(fetchDashboardStats());
+      dispatch(fetchSubjectBreakdown());
     } catch (err) {
       setToggleError('Failed to update task. Please try again.');
     }
   };
+
+  // ── Note Modal State ──
+  const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
 
   // ── Derived Data ──
   const chartData = weeklyChartData.length > 0
@@ -202,6 +213,15 @@ const Dashboard = () => {
         <GoldTabButton icon={FileText} label="Analyze PYQ" delay={0.2} />
         <GoldTabButton icon={Calendar} label="Study Plan" delay={0.3} />
         <GoldTabButton icon={TrendingUp} label="Reports" delay={0.4} />
+        <button 
+          onClick={() => setIsNoteModalOpen(true)}
+          className="bg-neutral-800 text-yellow-500 border border-yellow-700/50 hover:bg-neutral-700 p-2 rounded-r-lg shadow-lg flex items-center justify-center relative group"
+        >
+          <FileText className="w-5 h-5" />
+          <div className="absolute left-full ml-2 px-2 py-1 bg-neutral-800 text-yellow-500 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap transition-opacity">
+            Create Note
+          </div>
+        </button>
       </div>
 
       <div className="pl-4 md:pl-16 pr-4 lg:pr-8 py-8 space-y-12">
@@ -574,6 +594,16 @@ const Dashboard = () => {
           </VintagePaper>
         </div>
       </div>
+      {/* --- CREATE NOTE MODAL --- */}
+      <CreateNoteModal 
+        isOpen={isNoteModalOpen} 
+        onClose={() => setIsNoteModalOpen(false)} 
+        onNoteCreated={(note) => {
+          // Note created successfully
+          console.log('Note created', note);
+          // Could refresh activity here
+        }}
+      />
     </LeatherBoard>
   );
 };
