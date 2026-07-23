@@ -24,44 +24,46 @@ const router = express.Router();
 // Skip rate limiting in test environment
 const shouldSkip = () => process.env.NODE_ENV === 'test';
 
+// Reusable rate limiter factory
+const createRateLimiter = ({ windowMs, max, message }) =>
+  rateLimit({
+    windowMs,
+    max,
+    skip: shouldSkip,
+    message: {
+      success: false,
+      error: message,
+    },
+    standardHeaders: true,
+    legacyHeaders: true,
+  });
+
 // Login rate limiter: 5 attempts per 15 minutes per IP
-const loginLimiter = rateLimit({
+const loginLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000,
   max: 5,
-  skip: shouldSkip,
-  message: { success: false, error: 'Too many login attempts. Please try again after 15 minutes.' },
-  standardHeaders: true,
-  legacyHeaders: true,
+  message: 'Too many login attempts. Please try again after 15 minutes.',
 });
 
 // Register rate limiter: 5 attempts per 15 minutes per IP
-const registerLimiter = rateLimit({
+const registerLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000,
   max: 5,
-  skip: shouldSkip,
-  message: { success: false, error: 'Too many registration attempts. Please try again after 15 minutes.' },
-  standardHeaders: true,
-  legacyHeaders: true,
+  message: 'Too many registration attempts. Please try again after 15 minutes.',
 });
 
 // Forgot password rate limiter: 5 attempts per hour per IP
-const forgotPasswordLimiter = rateLimit({
+const forgotPasswordLimiter = createRateLimiter({
   windowMs: 60 * 60 * 1000,
   max: 5,
-  skip: shouldSkip,
-  message: { success: false, error: 'Too many password reset requests. Please try again after an hour.' },
-  standardHeaders: true,
-  legacyHeaders: true,
+  message: 'Too many password reset requests. Please try again after an hour.',
 });
 
 // Refresh token rate limiter: 10 attempts per 15 minutes per IP
-const refreshTokenLimiter = rateLimit({
+const refreshTokenLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000,
   max: 10,
-  skip: shouldSkip,
-  message: { success: false, error: 'Too many refresh requests. Please try again later.' },
-  standardHeaders: true,
-  legacyHeaders: true,
+  message: 'Too many refresh requests. Please try again later.',
 });
 
 router.post('/register', registerLimiter, validateRegister, register);
